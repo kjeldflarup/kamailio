@@ -1,0 +1,26 @@
+# Edit environment in this file to fit Your setup
+
+version: '3'
+services:
+    kamailio_forward:
+      build: docker
+      container_name: kamailio_forward
+      network_mode: host
+      environment:
+              - FORWARDURL=192.168.2.2:5080;transport=tcp 
+      volumes:
+              - ./cfg_forward:/usr/local/etc/kamailio
+      tty: true
+      stdin_open: false
+      command: /usr/local/sbin/kamailio -A PBXPORT=7072 -A PBXIP=192.168.2.2 -DD -E -P /var/run/kamailio/kamailio.pid -m 128 -M 12 -f /usr/local/etc/kamailio/kamailio.cfg
+    kamailio_forward2:
+      build: docker
+      container_name: kamailio_forward2
+      network_mode: host
+      environment:
+              - FORWARDURL=192.168.2.2:7072;transport=tcp 
+      volumes:
+              - ./cfg_forward:/usr/local/etc/kamailio
+      tty: true
+      stdin_open: false
+      command: /usr/local/sbin/kamailio -A PBXPORT=7071 -A PBXIP=192.168.2.2 -DD -E -P /var/run/kamailio/kamailio.pid -m 128 -M 12 -f /usr/local/etc/kamailio/kamailio.cfg
